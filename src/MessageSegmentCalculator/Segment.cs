@@ -92,4 +92,13 @@ public class Segment
     }
 
     public void Add(ISegmentElement encodedChar) => _elements.Add(encodedChar);
+
+    public ISegmentElement this[int index]
+    {
+        get => _elements[index];
+        set => _elements[index] = value;
+    }
+
+    public int Length => _elements.Count;
+    public int Count => _elements.Count;
 }
