@@ -5,6 +5,9 @@ namespace MessageSegmentCalculator;
 /// </summary>
 public class EncodedChar : ISegmentElement
 {
+    public bool IsReservedChar => false;
+    public bool IsUserDataHeader => false;
+
     /// <summary>
     /// Raw character (grapheme) as passed in the constructor
     /// </summary>

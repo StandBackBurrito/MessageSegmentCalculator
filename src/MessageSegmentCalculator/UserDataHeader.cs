@@ -6,9 +6,9 @@ namespace MessageSegmentCalculator;
 /// </summary>
 public class UserDataHeader : ISegmentElement
 {
-    public bool IsReservedChar { get; private set; } = true;
-    public bool IsUserDataHeader { get; private set; } = true;
-
+    public bool IsReservedChar => true;
+    public bool IsUserDataHeader => true;
+    public string Raw => "";
     public int CodeUnitSizeInBits() => 8;
     public int SizeInBits() => 8;
 }
