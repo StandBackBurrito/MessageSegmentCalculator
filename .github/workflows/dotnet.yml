@@ -35,8 +35,14 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
+
     - name: Build
       run: dotnet build --no-restore --configuration Release
+
+    - name: Upload Build
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
 
   test:
     needs: build
@@ -47,8 +53,18 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
+    - name: Download Build
+      uses: actions/download-artifact@v3
+      with:
+        name: build
+
     - name: Test
       run: dotnet test --no-build --verbosity normal --configuration Release
+
+    - name : Upload Test Results
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
 
   create_nuget:
     needs: build
@@ -59,10 +75,15 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
+    - name: Download Build
+      uses: actions/download-artifact@v3
+      with:
+        name: build
+
     - name: Publish NuGet package
       run: dotnet pack --no-build --configuration Release
-    - name: Upload NuGet package
 
+    - name: Upload NuGet package
       uses: actions/upload-artifact@v3
       with:
         name: nuget
@@ -94,7 +115,7 @@ jobs:
 
   publish_nuget:
     if: github.event_name == 'release'
-    needs: [ create_nuget, test ]
+    needs: [ validate_nuget, test ]
     runs-on: ubuntu-latest
     steps:
     - name: Download Artifact
