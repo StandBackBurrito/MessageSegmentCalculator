@@ -32,6 +32,7 @@ public class IndexTests
     [SmartEncodingMap]
     public void SmartEncoding_WithSmartEncodingDisabled_DoesNotModifyChars(string key, string value)
     {
+        var _ = value; // not used for this test
         var segmentedMessage = new SegmentedMessage(key, SmsEncoding.Auto, false);
         String.Join("", segmentedMessage.Graphemes).Should().Be(key);
     }
