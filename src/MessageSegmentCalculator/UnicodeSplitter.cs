@@ -1,7 +1,7 @@
 using System.Globalization;
 
 namespace MessageSegmentCalculator;
-public class UnicodeSplitter()
+public class UnicodeSplitter
 {
     public static string[] SplitGraphemes(string source)
     {
