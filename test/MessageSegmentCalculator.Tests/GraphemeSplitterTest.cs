@@ -10,7 +10,7 @@ public class GraphemeSplitterTest
         string[] expected = ["h", "e", "l", "l", "o"];
 
         // Act
-        string[] result = GraphemeSplitter.SplitGraphemes(input);
+        string[] result = UnicodeSplitter.SplitGraphemes(input);
 
         // Assert
         Assert.Equal(expected, result);
@@ -24,7 +24,7 @@ public class GraphemeSplitterTest
         string[] expected = [];
 
         // Act
-        string[] result = GraphemeSplitter.SplitGraphemes(input);
+        string[] result = UnicodeSplitter.SplitGraphemes(input);
 
         // Assert
         Assert.Equal(expected, result);
@@ -38,7 +38,7 @@ public class GraphemeSplitterTest
         string[] expected = ["h", "e", "l", "l", "o", "👋"];
 
         // Act
-        string[] result = GraphemeSplitter.SplitGraphemes(input);
+        string[] result = UnicodeSplitter.SplitGraphemes(input);
 
         // Assert
         Assert.Equal(expected, result);
@@ -52,7 +52,7 @@ public class GraphemeSplitterTest
         string[] expected = ["h", "é", "l", "l", "o"];
 
         // Act
-        string[] result = GraphemeSplitter.SplitGraphemes(input);
+        string[] result = UnicodeSplitter.SplitGraphemes(input);
 
         // Assert
         Assert.Equal(expected, result);
@@ -66,7 +66,7 @@ public class GraphemeSplitterTest
         string[] expected = ["𐍈", "h", "e", "l", "l", "o"];
 
         // Act
-        string[] result = GraphemeSplitter.SplitGraphemes(input);
+        string[] result = UnicodeSplitter.SplitGraphemes(input);
 
         // Assert
         Assert.Equal(expected, result);
@@ -80,7 +80,7 @@ public class GraphemeSplitterTest
         string[] expected = { "h", "e", "l", "l", "o", "\r\n", "w", "o", "r", "l", "d" };
 
         // Act
-        string[] result = GraphemeSplitter.SplitGraphemes(input);
+        string[] result = UnicodeSplitter.SplitGraphemes(input);
 
         // Assert
         Assert.Equal(expected, result);

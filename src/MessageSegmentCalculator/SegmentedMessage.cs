@@ -55,6 +55,10 @@ public class SegmentedMessage
     /// warnings message line break style
     /// </summary>
     public string[] Warnings { get; private set; }
+    public object EncodingName => _encoding.ToString();
+    public object SegmentsCount => Segments.Length;
+    public object MessageSize => Segments.Select(x => x.MessageSizeInBits()).Sum();
+    public object TotalSize => Segments.Select(x => x.SizeInBits()).Sum();
 
     /// <summary>
     /// Create a new segmented message from a string
@@ -64,7 +68,7 @@ public class SegmentedMessage
     /// <param name="smartEncoding">Optional: whether or not Twilio's [Smart Encoding](https://www.twilio.com/docs/messaging/services#smart-encoding) is emulated. Default value: false</param>
     /// <exception cref="Error">Encoding not supported. Valid values for encoding are GSM-7, UCS-2, auto</exception>
     /// <exception cref="Error">The string provided is incompatible with GSM-7 encoding</exception>
-    public SegmentedMessage(string message, SmsEncoding encoding = SmsEncoding.AUTO, bool smartEncoding = false)
+    public SegmentedMessage(string message, SmsEncoding encoding = SmsEncoding.Auto, bool smartEncoding = false)
     {
         _declaredEncoding = encoding;
 
@@ -73,8 +77,10 @@ public class SegmentedMessage
             message = SmartEncoding.Encode(message);
         }
 
-        var initialGraphmems = GraphemeSplitter.SplitGraphemes(message);
-        NumberOfUnicodeScalars = initialGraphmems.Length;
+        var initialGraphmems = UnicodeSplitter.SplitGraphemes(message);
+        NumberOfUnicodeScalars = UnicodeSplitter
+            .SplitUnicodeScalers(message)
+            .Length;
 
         Graphemes = initialGraphmems
             .SelectMany(x => x == "\r\n" ? ["\r", "\n"] : new[] { x })
@@ -82,7 +88,7 @@ public class SegmentedMessage
 
         var hasAnyUCSCharacters = HasAnyUCSCharacters(Graphemes);
 
-        if (_declaredEncoding == SmsEncoding.AUTO)
+        if (_declaredEncoding == SmsEncoding.Auto)
         {
             _encoding = hasAnyUCSCharacters
                 ? SmsEncoding.UCS2
@@ -173,12 +179,6 @@ public class SegmentedMessage
     }
 
     /// <summary>
-    /// Return the encoding of the message segment
-    /// </summary>
-    /// <returns>Encoding for the message segment(s)</returns>
-    public string GetEncodingName() => _encoding.ToString();
-
-    /// <summary>
     /// Create an array of EncodedChar from an array of graphemes
     /// </summary>
     /// <param name="graphemes">Array of graphemes representing the message</param>
@@ -208,25 +208,6 @@ public class SegmentedMessage
     /// </remarks>
     private int CountCodeUnits(EncodedChar[] encodedChars)
         => encodedChars.Select(x => x.CodeUnits.Length).Sum();
-
-    /// <summary>
-    /// Return the total size of the message in bits
-    /// </summary>
-    /// <returns>Total size of the message in bits</returns>
-    public int GetTotalSize()
-        => Segments.Select(x => x.SizeInBits()).Sum();
-
-    /// <summary>
-    /// Return the total size of the message in bits (excluding User Data Header if present)
-    /// </summary>
-    /// <returns>Total size of the message in bits (excluding User Data Header if present)</returns>
-    public int GetMessageSize()
-        => Segments.Select(x => x.MessageSizeInBits()).Sum();
-
-    /// <summary>
-    /// Return the number of segments the message has been split into
-    /// </summary>
-    public int GetSegmentsCount() => Segments.Length;
 
     /// <summary>
     /// Return the non-GSM-7 characters in the message body

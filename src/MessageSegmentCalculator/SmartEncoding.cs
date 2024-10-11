@@ -11,12 +11,12 @@ public class SmartEncoding
         var sb = new StringBuilder();
 
         var charEnumerator = StringInfo.GetTextElementEnumerator(message);
-        while (charEnumerator.MoveNext())
+        foreach(var unicodeScalar in message.EnumerateRunes())
         {
-            var currentChar = charEnumerator.GetTextElement();
-            var newChar = SmartEncodingMap.TryGetValue(currentChar, out var replacement)
+            var unicodeChar = unicodeScalar.ToString();
+            var newChar = SmartEncodingMap.TryGetValue(unicodeChar, out var replacement)
                             ? replacement
-                            : currentChar;
+                            : unicodeChar;
 
             sb.Append(newChar);
         }

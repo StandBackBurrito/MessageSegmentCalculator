@@ -1,5 +1,7 @@
 using FluentAssertions;
 
+namespace MessageSegmentCalculator.Tests;
+
 public class SegmentedMessageTests
 {
     [Fact]
