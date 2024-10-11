@@ -10,7 +10,7 @@ using MessageSegmentCalculator;
 public class SegmentedMessage
 {
     /// <summary>
-    /// Encoding set in the varructor for the message. Allowed values: 'GSM-7', 'UCS-2', 'auto'.
+    /// Encoding set in the constructor for the message. Allowed values: 'GSM-7', 'UCS-2', 'auto'.
     /// </summary>
     private SmsEncoding _declaredEncoding;
 
