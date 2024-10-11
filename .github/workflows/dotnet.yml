@@ -15,7 +15,6 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   DOTNET_NOLOGO: true
   NuGetDirectory: ${{github.workspace}}/nuget
-  BuildDirectory: ${{github.workspace}}/build
 
 defaults:
   run:
@@ -38,7 +37,7 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore --configuration Release --output ${{ env.BuildDirectory }}
+      run: dotnet build --no-restore --configuration Release
 
     - name: Upload Build
       uses: actions/upload-artifact@v3
@@ -46,7 +45,7 @@ jobs:
         name: build
         if-no-files-found: error
         retention-days: 7
-        path: ${{ env.BuildDirectory }}/**/bin/Release/**/*
+        path: ${{github.workspace}}/**/bin/Release/**/*
 
   test:
     needs: build
@@ -86,7 +85,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nuget
-        path: ${{ env.NuGetDirectory }}
+        path: ${{env.NuGetDirectory}}
 
   validate_nuget:
     needs: create_nuget
@@ -101,7 +100,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: nuget
-        path: ${{ env.NuGetDirectory }}
+        path: ${{env.NuGetDirectory}}
 
     - name: Install nuget validator
       run: dotnet tool update Meziantou.Framework.NuGetPackageValidation.Tool --global
@@ -111,7 +110,7 @@ jobs:
       # If some rules are not applicable, you can disable them
       # using the --excluded-rules or --excluded-rule-ids option
     - name: Validate NuGet package
-      run: meziantou.validate-nuget-package (Get-ChildItem "${{ env.NuGetDirectory }}/*.nupkg")
+      run: meziantou.validate-nuget-package (Get-ChildItem "${{env.NuGetDirectory}}/*.nupkg")
 
   publish_nuget:
     if: github.event_name == 'release'
@@ -122,7 +121,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: nuget
-        path: ${{ env.NuGetDirectory }}
+        path: ${{env.NuGetDirectory}}
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -130,4 +129,4 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Publish NuGet package
-      run: dotnet nuget push **/*.nupkg --source "github" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+      run: dotnet nuget push **/*.nupkg --source "github" --api-key ${{secrets.GITHUB_TOKEN}} --skip-duplicate
