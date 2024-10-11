@@ -15,6 +15,7 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   DOTNET_NOLOGO: true
   NuGetDirectory: ${{github.workspace}}/nuget
+  BuildDirectory: ${{github.workspace}}/build
 
 defaults:
   run:
@@ -37,7 +38,7 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build --no-restore --configuration Release --output ${{ env.BuildDirectory }}
 
     - name: Upload Build
       uses: actions/upload-artifact@v3
@@ -45,7 +46,7 @@ jobs:
         name: build
         if-no-files-found: error
         retention-days: 7
-        path: /**/bin/Release/**/*
+        path: ${{ env.BuildDirectory }}/**/bin/Release/**/*
 
   test:
     needs: build
