@@ -43,6 +43,9 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build
+        if-no-files-found: error
+        retention-days: 7
+        path: /**/bin/Release/**/*
 
   test:
     needs: build
@@ -60,11 +63,6 @@ jobs:
 
     - name: Test
       run: dotnet test --no-build --verbosity normal --configuration Release
-
-    - name : Upload Test Results
-      uses: actions/upload-artifact@v3
-      with:
-        name: test-results
 
   create_nuget:
     needs: build
@@ -87,6 +85,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: nuget
+        path: ${{ env.NuGetDirectory }}
 
   validate_nuget:
     needs: create_nuget
