@@ -10,12 +10,23 @@
  *              GSM-7 is of variable length and require 1 or 2 code unit per character
  */
 
-using System.Collections.Generic;
-
 namespace MessageSegmentCalculator;
 
+/// <summary>
+///  Mapping of Unicode characters to GSM-7 characters
+/// </summary>
+/// <remarks>
+/// This class is used to map Unicode characters to GSM-7 characters.
+/// </remarks>
 public static class UnicodeToGsm
 {
+
+  /// <summary>
+  /// Mapping of Unicode characters to GSM-7 characters
+  /// </summary>
+  /// <remarks>
+  /// This dictionary is used to map Unicode characters to GSM-7 characters.
+  /// </remarks>
   public static readonly Dictionary<int, byte[]> Map = new()
   {
     { 0x000a, [0x0a] },

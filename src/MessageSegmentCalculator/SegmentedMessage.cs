@@ -55,10 +55,30 @@ public class SegmentedMessage
     /// warnings message line break style
     /// </summary>
     public string[] Warnings { get; private set; }
-    public object EncodingName => _encoding.ToString();
-    public object SegmentsCount => Segments.Length;
-    public object MessageSize => Segments.Select(x => x.MessageSizeInBits()).Sum();
-    public object TotalSize => Segments.Select(x => x.SizeInBits()).Sum();
+
+    /// <summary>
+    /// Name of the encoding used for the message
+    /// </summary>
+    /// <returns>Encoding name</returns>
+    public string EncodingName => _encoding.ToString();
+
+    /// <summary>
+    /// Number of segments the message has been split into
+    /// </summary>
+    /// <returns>Number of segments</returns>
+    public int SegmentsCount => Segments.Length;
+
+    /// <summary>
+    /// Total size of the message in bits
+    /// </summary>
+    /// <returns>Total size of the message in bits</returns>
+    public int MessageSize => Segments.Select(x => x.MessageSizeInBits()).Sum();
+
+    /// <summary>
+    /// Total size of the all segments in bits
+    /// </summary>
+    /// <returns>Total size of the all segments in bits</returns>
+    public int TotalSize => Segments.Select(x => x.SizeInBits()).Sum();
 
     /// <summary>
     /// Create a new segmented message from a string
@@ -66,8 +86,7 @@ public class SegmentedMessage
     /// <param name="message">Body of the message</param>
     /// <param name="encoding">Optional: encoding. It can be 'GSM-7', 'UCS-2', 'auto'. Default value: 'auto'</param>
     /// <param name="smartEncoding">Optional: whether or not Twilio's [Smart Encoding](https://www.twilio.com/docs/messaging/services#smart-encoding) is emulated. Default value: false</param>
-    /// <exception cref="Error">Encoding not supported. Valid values for encoding are GSM-7, UCS-2, auto</exception>
-    /// <exception cref="Error">The string provided is incompatible with GSM-7 encoding</exception>
+    /// <exception cref="InvalidDataException">The string provided is incompatible with GSM-7 encoding</exception>
     public SegmentedMessage(string message, SmsEncoding encoding = SmsEncoding.Auto, bool smartEncoding = false)
     {
         _declaredEncoding = encoding;
@@ -145,7 +164,6 @@ public class SegmentedMessage
      * @returns {object[]} Array of Segment
      * @private
      */
-
     private Segment[] BuildSegments(EncodedChar[] encodedChars)
     {
         List<Segment> segments = [];

@@ -1,16 +1,30 @@
 
-using System.Globalization;
 using System.Text;
 
 namespace MessageSegmentCalculator;
 
+/// <summary>
+/// Utility class to encode a string with smart encoding
+/// </summary>
 public class SmartEncoding
 {
+    /// <summary>
+    /// Encode a string with smart encoding
+    /// </summary>
+    /// <param name="message">The string to encode</param>
+    /// <returns>The encoded string</returns>
+    /// <remarks>
+    /// This method replaces some characters with their ASCII equivalent.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var encodedMessage = SmartEncoding.Encode("“Hello, World!”");
+    /// </code>
+    /// </example>
     public static string Encode(string message)
     {
         var sb = new StringBuilder();
 
-        var charEnumerator = StringInfo.GetTextElementEnumerator(message);
         foreach(var unicodeScalar in message.EnumerateRunes())
         {
             var unicodeChar = unicodeScalar.ToString();
@@ -24,6 +38,12 @@ public class SmartEncoding
         return sb.ToString();
     }
 
+    /// <summary>
+    /// Map of characters to replace with their ASCII equivalent
+    /// </summary>
+    /// <remarks>
+    /// This map is used to replace some characters with their ASCII equivalent.
+    /// </remarks>
     public static readonly Dictionary<string, string> SmartEncodingMap = new()
     {
         { "\u00ab", "\"" }, // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK

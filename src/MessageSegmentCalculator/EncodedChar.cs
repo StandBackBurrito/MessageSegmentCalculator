@@ -5,7 +5,20 @@ namespace MessageSegmentCalculator;
 /// </summary>
 public class EncodedChar : ISegmentElement
 {
+    /// <summary>
+    /// True if the character is a reserved char
+    /// </summary>
+    /// <remarks>
+    /// Reserved characters are used for message headers and are not part of the message body.
+    /// </remarks>
     public bool IsReservedChar => false;
+
+    /// <summary>
+    /// True if the character is a user data header
+    /// </summary>
+    /// <remarks>
+    /// User data headers are used to link mulitple segments of a message together.
+    /// </remarks>
     public bool IsUserDataHeader => false;
 
     /// <summary>
@@ -33,7 +46,6 @@ public class EncodedChar : ISegmentElement
     /// </summary>
     /// <param name="char">The character to encode</param>
     /// <param name="encoding">The encoding to use</param>
-
     public EncodedChar(string @char, SmsEncoding encoding)
     {
         Raw = @char;
@@ -57,6 +69,10 @@ public class EncodedChar : ISegmentElement
         }
     }
 
+    /// <summary>
+    /// Return the number of bits used by a code unit
+    /// </summary>
+    /// <returns>The number of bits used by a code unit</returns>
     public int CodeUnitSizeInBits()
     {
         return Encoding switch
@@ -67,6 +83,10 @@ public class EncodedChar : ISegmentElement
         };
     }
 
+    /// <summary>
+    /// Return the number of bits used by the character
+    /// </summary>
+    /// <returns>The number of bits used by the character</returns>
     public int SizeInBits()
     {
         if (Encoding == SmsEncoding.UCS2 && IsGSM7)

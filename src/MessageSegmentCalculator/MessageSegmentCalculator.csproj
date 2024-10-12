@@ -16,9 +16,6 @@
 
   <PropertyGroup>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-
-    <!-- Disable the compiler warnings for undocumented -->
-    <NoWarn>$(NoWarn);CS1591;CS1574</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
