@@ -54,7 +54,7 @@ public class IndexTests
         var segmentedMessage = new SegmentedMessage(testMessage.Body);
         segmentedMessage.EncodingName.Should().Be(testMessage.Encoding);
         segmentedMessage.Segments.Length.Should().Be(testMessage.Segments);
-        segmentedMessage.SegmentsCount.Should().Be(testMessage.Segments);
+        segmentedMessage.SegmentCount.Should().Be(testMessage.Segments);
         segmentedMessage.MessageSize.Should().Be(testMessage.MessageSize);
         segmentedMessage.TotalSize.Should().Be(testMessage.TotalSize);
         segmentedMessage.NumberOfUnicodeScalars.Should().Be(testMessage.UnicodeScalars);
@@ -69,7 +69,7 @@ public class IndexTests
         var segmentedMessage = new SegmentedMessage(testMessage);
         segmentedMessage.EncodingName.Should().Be("GSM7");
         segmentedMessage.Segments.Length.Should().Be(1);
-        segmentedMessage.SegmentsCount.Should().Be(1);
+        segmentedMessage.SegmentCount.Should().Be(1);
         segmentedMessage.MessageSize.Should().Be(1120);
         segmentedMessage.TotalSize.Should().Be(1120);
     }
@@ -82,7 +82,7 @@ public class IndexTests
         var segmentedMessage = new SegmentedMessage(testMessage);
         segmentedMessage.EncodingName.Should().Be("GSM7");
         segmentedMessage.Segments.Length.Should().Be(2);
-        segmentedMessage.SegmentsCount.Should().Be(2);
+        segmentedMessage.SegmentCount.Should().Be(2);
         segmentedMessage.MessageSize.Should().Be(1127);
         segmentedMessage.TotalSize.Should().Be(1223);
     }
@@ -93,7 +93,7 @@ public class IndexTests
     {
         var testMessage = new string(character, 70);
         var segmentedMessage = new SegmentedMessage(testMessage);
-        segmentedMessage.SegmentsCount.Should().Be(1);
+        segmentedMessage.SegmentCount.Should().Be(1);
         segmentedMessage.EncodedChars.All(c => !c.IsGSM7).Should().BeTrue();
     }
 
@@ -103,7 +103,7 @@ public class IndexTests
     {
         var testMessage = new string(character, 71);
         var segmentedMessage = new SegmentedMessage(testMessage);
-        segmentedMessage.SegmentsCount.Should().Be(2);
+        segmentedMessage.SegmentCount.Should().Be(2);
         segmentedMessage.EncodedChars.All(c => !c.IsGSM7).Should().BeTrue();
     }
 
@@ -112,7 +112,7 @@ public class IndexTests
     {
         var testMessage = "😀]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]";
         var segmentedMessage = new SegmentedMessage(testMessage);
-        segmentedMessage.SegmentsCount.Should().Be(1);
+        segmentedMessage.SegmentCount.Should().Be(1);
     }
 
     [Fact]
@@ -120,7 +120,7 @@ public class IndexTests
     {
         var testMessage = "😀]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]";
         var segmentedMessage = new SegmentedMessage(testMessage);
-        segmentedMessage.SegmentsCount.Should().Be(2);
+        segmentedMessage.SegmentCount.Should().Be(2);
     }
 
     [Fact]
@@ -153,7 +153,7 @@ public class IndexTests
     {
         var testMessage = "é́́aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var segmentedMessage = new SegmentedMessage(testMessage);
-        segmentedMessage.SegmentsCount.Should().Be(1);
+        segmentedMessage.SegmentCount.Should().Be(1);
     }
 
     [Fact]
@@ -161,6 +161,6 @@ public class IndexTests
     {
         var testMessage = "é́́aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         var segmentedMessage = new SegmentedMessage(testMessage);
-        segmentedMessage.SegmentsCount.Should().Be(2);
+        segmentedMessage.SegmentCount.Should().Be(2);
     }
 }

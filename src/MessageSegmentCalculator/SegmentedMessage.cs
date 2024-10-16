@@ -1,4 +1,4 @@
-using MessageSegmentCalculator;
+namespace MessageSegmentCalculator;
 
 /// <summary>
 /// A segmented message
@@ -66,7 +66,7 @@ public class SegmentedMessage
     /// Number of segments the message has been split into
     /// </summary>
     /// <returns>Number of segments</returns>
-    public int SegmentsCount => Segments.Length;
+    public int SegmentCount => Segments.Length;
 
     /// <summary>
     /// Total size of the message in bits
