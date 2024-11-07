@@ -39,14 +39,10 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
 
-    - name: Print GitHub context
+    - name: Dump GitHub context
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: |
-        echo "GitHub context:"
-        echo "$GITHUB_CONTEXT"
-        echo "$GITHUB_CONTEXT" | jq
-        echo "${{ toJson(github) }}" | jq .
+      run: echo "$GITHUB_CONTEXT"
 
     - name: Create NuGet package
       run: dotnet pack --no-build --configuration Release --output ${{env.NuGetDirectory}} --include-source
