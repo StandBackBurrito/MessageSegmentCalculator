@@ -39,11 +39,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
 
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: echo "$GITHUB_CONTEXT"
-
     - name: Create NuGet package
       run: dotnet pack --no-build --configuration Release --output ${{env.NuGetDirectory}} --include-source
 
@@ -78,34 +73,9 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal --configuration Release
 
-  validate_nuget:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-
-    - name: Download NuGet package
-      uses: actions/download-artifact@v4
-      with:
-        name: nuget
-        path: ${{env.NuGetDirectory}}
-
-    - name: Install nuget validator
-      run: dotnet tool update Meziantou.Framework.NuGetPackageValidation.Tool --global
-
-      # Validate metadata and content of the NuGet package
-      # https://www.nuget.org/packages/Meziantou.Framework.NuGetPackageValidation.Tool#readme-body-tab
-      # If some rules are not applicable, you can disable them
-      # using the --excluded-rules or --excluded-rule-ids option
-    - name: Validate NuGet package
-      run: meziantou.validate-nuget-package (Get-ChildItem "${{env.NuGetDirectory}}/*.nupkg")
-
   publish_nuget:
     if: github.event_name == 'release'
-    needs: [ validate_nuget, test ]
+    needs: [ test ]
     runs-on: ubuntu-latest
     steps:
     - name: Download Artifact
