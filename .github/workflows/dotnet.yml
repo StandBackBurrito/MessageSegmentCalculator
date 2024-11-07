@@ -39,6 +39,15 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
 
+    - name: Create NuGet package
+      run: dotnet pack --no-build --configuration Release --output ${{env.NuGetDirectory}} --include-source
+
+    - name: Upload NuGet package
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget
+        path: ${{env.NuGetDirectory}}
+
     - name: Upload Build
       uses: actions/upload-artifact@v4
       with:
@@ -64,35 +73,8 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal --configuration Release
 
-  create_nuget:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: |
-          5.0.x
-          6.0.x
-          7.0.x
-          8.0.x
-
-    - name: Download Build
-      uses: actions/download-artifact@v4
-      with:
-        name: build
-
-    - name: Publish NuGet package
-      run: dotnet pack --no-build --configuration Release --output ${{env.NuGetDirectory}} --include-symbols
-
-    - name: Upload NuGet package
-      uses: actions/upload-artifact@v4
-      with:
-        name: nuget
-        path: ${{env.NuGetDirectory}}
-
   validate_nuget:
-    needs: create_nuget
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Setup .NET
