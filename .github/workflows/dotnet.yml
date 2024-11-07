@@ -46,6 +46,7 @@ jobs:
         echo "GitHub context:"
         echo "$GITHUB_CONTEXT"
         echo "$GITHUB_CONTEXT" | jq
+        echo "${{ toJson(github) }}" | jq .
 
     - name: Create NuGet package
       run: dotnet pack --no-build --configuration Release --output ${{env.NuGetDirectory}} --include-source
