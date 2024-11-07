@@ -39,6 +39,14 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
 
+    - name: Print GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "GitHub context:"
+        echo "$GITHUB_CONTEXT"
+        echo "$GITHUB_CONTEXT" | jq
+
     - name: Create NuGet package
       run: dotnet pack --no-build --configuration Release --output ${{env.NuGetDirectory}} --include-source
 
@@ -115,4 +123,4 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Publish NuGet package
-      run: dotnet nuget push **/*.nupkg --source "github" --api-key ${{secrets.GITHUB_TOKEN}} --skip-duplicate
+      run: dotnet nuget push **/*.nupkg --source "github" --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate
